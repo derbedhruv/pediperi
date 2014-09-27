@@ -1,0 +1,95 @@
+#include <ctype.h>
+
+String inputString, lat, longit;
+boolean acquired = false;
+
+void setup() {
+  // serial dude
+  Serial.begin(9600);
+  
+  // SET THE PINS WHICH WILL BE USED
+  // we set the longitudes as OUTPUT
+  for (int i=2; i<=10; i++) {
+    pinMode(i, OUTPUT);
+  }
+  
+  // we then set the latitudes as output
+  for (int m=22; m<=46; m++) {
+    pinMode(m, OUTPUT);
+  }
+   
+  /* 
+  // the pins 0-7 (which are hte longitudes) need to be HIGH
+  for (int j=2; j<=10; j++) {
+    digitalWrite(j, HIGH);
+  }
+  // digitalWrite(2, HIGH);
+  // digitalWrite(22, LOW);
+  // digitalWrite(24, HIGH);
+  
+  // and each latitude (A-X) needs to be LOW in order for an LED to glow
+  //digitalWrite(2, LOW);
+  */
+}
+
+void lightHerUp(String latitude, String longitude) {
+   // this is a special function.
+   // for single LEDs, the arguments shall be numbers in the range ((2, 10), (22, 46))
+   // for hemispheres, the inputs will be ((h), [n,e,w,s]) corresponding to the 4 hemispheres possible
+   // for quadrants, the inputs will be ((q), [1,2,3,4]) corresponding to the 4 quadrants possible
+   // all LEDs will flash for a particular period of time and then cut off.
+   
+   // first check if the latitude value is a number or not..
+   if (isdigit(latitude[0]) == 1) {  // the latitude will only be (2,10) so that's cool, it's only one char
+       // this is the case for a single LED
+       Serial.println("individual");
+   } else {
+     // Serial.println(latitude[0]);
+     // we deal with 2 cases: hemispheres and quadrants
+     
+     switch(latitude[0]) {
+       case 'h': {
+         Serial.println("hemisphere");
+         break;
+       }
+       case 'q': {
+         Serial.println("quadrant");
+         break;
+       }
+     }
+     
+   }
+}
+
+void loop() {
+  if (acquired == true) {
+     Serial.print("started... ");
+     lightHerUp(lat, longit);
+     acquired = false;
+  }
+}
+
+void serialEvent() {
+  // this is where the user can enter the LED they want to be put on.. and that's what'll happen
+  while (Serial.available()) {
+    // get the new byte:
+    char inChar = (char)Serial.read(); 
+    
+    if (inChar == ',') {
+      Serial.println(inputString);
+      lat = inputString;
+      // reset that shit
+      inputString = "";
+    } else {
+      if (inChar == '\n') {
+        longit = inputString;
+        Serial.println(inputString);
+        // reset that shit
+        inputString = "";
+        acquired = true;
+      } else {
+        inputString += inChar;
+      }
+    }
+  }
+}
