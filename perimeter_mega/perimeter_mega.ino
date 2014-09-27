@@ -98,20 +98,20 @@ void lightHerUp(String latitude, String longitude) {
        case 'q': {
          // quadrants..
          // we start by putting the latitudes on
-           for (int s=2; s<=10; s++) {
-             digitalWrite(s, HIGH);
-           }
+         for (int s=2; s<=10; s++) {
+           digitalWrite(s, HIGH);
+         }
          switch(longitude[0]) {
            // we shall go anticlockwise. "1" shall start from the bottom right. 
           case '1': {
             // the bottom right. O (50 to 52) to T (23 to 29).
+            // then we put on 2*(11,14)+1
+            for (int r=11; r<=14; r++) {
+              digitalWrite((2*r+1), LOW);
+              delay(1);
+            }
             for (int q=25; q<=26; q++) {
                digitalWrite(2*q, LOW);
-               delay(1);
-             }
-             // then we put on 2*(11,14)+1
-             for (int r=11; r<=14; r++) {
-               digitalWrite((2*r+1), LOW);
                delay(1);
              }
             break;
@@ -120,6 +120,27 @@ void lightHerUp(String latitude, String longitude) {
             // the top right. I to N (38 to 48) 
             for (int q=19; q<=24; q++) {
                digitalWrite(2*q, LOW);
+             }
+            break;
+          } 
+          case '3': {
+            // the top left. C to H. (26 to 36).
+            for (int q=13; q<=18; q++) {
+               digitalWrite(2*q, LOW);
+               delay(1);
+             }
+            break;
+          } 
+          case '4': {
+            // the bottom left. U to X (31 to 37), A to B (22, 24)
+            // then we put on 2*(11,14)+1
+            for (int r=15; r<=18; r++) {
+              digitalWrite((2*r+1), LOW);
+              delay(1);
+            }
+            for (int q=11; q<=12; q++) {
+               digitalWrite(2*q, LOW);
+               delay(1);
              }
             break;
           } 
