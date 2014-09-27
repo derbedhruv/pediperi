@@ -41,21 +41,27 @@ void lightHerUp(String latitude, String longitude) {
    // first check if the latitude value is a number or not..
    if (isdigit(latitude[0]) == 1) {  // the latitude will only be (2,10) so that's cool, it's only one char
        // this is the case for a single LED
-       // Serial.println("individual");
-       // make the pin "latitude" go HIGH
-       for (int j=2; j<=latitude.toInt(); j++) {
+       // step 1: set the latitude to be HIGH
+       digitalWrite(5, HIGH);
+  
+       // step 2: set all the longitudes to be HIGH, so that everything's shut off
+       for (int j=22; j<=52; j++) {
          digitalWrite(j, HIGH);
        }
-   } else {
+  
+       // step 3: set the longitude which you need to be on, LOW. then you have a single LED on.
+       digitalWrite(27, LOW);
+       
+     } else {
      // Serial.println(latitude[0]);
      // we deal with 2 cases: hemispheres and quadrants
      switch(latitude[0]) {
        case 'h': {
-         Serial.println("hemisphere");
+         // Serial.println("hemisphere");
          break;
        }
        case 'q': {
-         Serial.println("quadrant");
+         // Serial.println("quadrant");
          break;
        }
      }
@@ -65,7 +71,7 @@ void lightHerUp(String latitude, String longitude) {
 
 void loop() {
   if (acquired == true) {
-     Serial.print("started... ");
+     // Serial.print("started... ");
      lightHerUp(lat, longit);
      acquired = false;
   }
