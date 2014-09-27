@@ -63,7 +63,19 @@ void lightHerUp(String latitude, String longitude) {
      switch(latitude[0]) {
        case 'h': {
          // Serial.println("hemisphere");
-         
+         // we then switch through WHICH hemisphere
+         switch(longitude[0]){
+           case 'l': {
+             // LEFT hemisphere.. turn on U to X and A to I.
+             
+             break;
+           }
+           case 'r': {
+             // LEFT hemisphere.. turn on I to T.
+             
+             break;  
+           }
+         }
          break;
        }
        case 'q': {
