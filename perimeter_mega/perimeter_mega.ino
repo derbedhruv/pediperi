@@ -69,13 +69,27 @@ void lightHerUp(String latitude, String longitude) {
          // we then switch through WHICH hemisphere
          switch(longitude[0]){
            case 'l': {
-             // LEFT hemisphere.. turn on U to X and A to I.
-             
+             // LEFT hemisphere.. turn on U to X (31,37) and A to I (22,38).
+             // first we put on 2*(11,19)
+             for (int q=11; q<=19; q++) {
+               digitalWrite(2*q, LOW);
+             }
+             // then we put on 2*(15,18)+1
+             for (int r=15; r<=18; r++) {
+               digitalWrite((2*r+1), LOW);
+             }
              break;
            }
            case 'r': {
-             // LEFT hemisphere.. turn on I to T.
-             
+             // RIGHT hemisphere.. turn on J to T.. which is (40,52) in steps of 2 and (23, 29) in steps of 2
+             // first we put on 2*(20,26)
+             for (int q=20; q<=26; q++) {
+               digitalWrite(2*q, LOW);
+             }
+             // then we put on 2*(11,14)+1
+             for (int r=11; r<=14; r++) {
+               digitalWrite((2*r+1), LOW);
+             }
              break;  
            }
          }
