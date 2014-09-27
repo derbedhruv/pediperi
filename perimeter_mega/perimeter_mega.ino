@@ -34,7 +34,7 @@ void setup() {
 void lightHerUp(String latitude, String longitude) {
    // this is a special function.
    // for single LEDs, the arguments shall be numbers in the range ((2, 10), (22, 46))
-   // for hemispheres, the inputs will be ((h), [n,e,w,s]) corresponding to the 4 hemispheres possible
+   // for hemispheres, the inputs will be ((h), [l,r]) corresponding to the 4 hemispheres possible
    // for quadrants, the inputs will be ((q), [1,2,3,4]) corresponding to the 4 quadrants possible
    // all LEDs will flash for a particular period of time and then cut off.
    
@@ -96,7 +96,34 @@ void lightHerUp(String latitude, String longitude) {
          break;
        }
        case 'q': {
-         // Serial.println("quadrant");
+         // quadrants..
+         // we start by putting the latitudes on
+           for (int s=2; s<=10; s++) {
+             digitalWrite(s, HIGH);
+           }
+         switch(longitude[0]) {
+           // we shall go anticlockwise. "1" shall start from the bottom right. 
+          case '1': {
+            // the bottom right. O (50 to 52) to T (23 to 29).
+            for (int q=25; q<=26; q++) {
+               digitalWrite(2*q, LOW);
+               delay(1);
+             }
+             // then we put on 2*(11,14)+1
+             for (int r=11; r<=14; r++) {
+               digitalWrite((2*r+1), LOW);
+               delay(1);
+             }
+            break;
+          } 
+          case '2': {
+            // the top right. I to N (38 to 48) 
+            for (int q=19; q<=24; q++) {
+               digitalWrite(2*q, LOW);
+             }
+            break;
+          } 
+         }
          break;
        }
      }
