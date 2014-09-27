@@ -14,22 +14,17 @@ void setup() {
   }
   
   // we then set the latitudes as output
-  for (int m=22; m<=46; m++) {
+  for (int m=22; m<=52; m++) {
     pinMode(m, OUTPUT);
   }
-   
-  /* 
-  // the pins 0-7 (which are hte longitudes) need to be HIGH
-  for (int j=2; j<=10; j++) {
+  /*
+  digitalWrite(5, HIGH);
+  
+  for (int j=22; j<=52; j++) {
     digitalWrite(j, HIGH);
   }
-  // digitalWrite(2, HIGH);
-  // digitalWrite(22, LOW);
-  // digitalWrite(24, HIGH);
-  
-  // and each latitude (A-X) needs to be LOW in order for an LED to glow
-  //digitalWrite(2, LOW);
-  */
+  digitalWrite(27, LOW);
+  /**/ 
 }
 
 void lightHerUp(String latitude, String longitude) {
@@ -42,11 +37,14 @@ void lightHerUp(String latitude, String longitude) {
    // first check if the latitude value is a number or not..
    if (isdigit(latitude[0]) == 1) {  // the latitude will only be (2,10) so that's cool, it's only one char
        // this is the case for a single LED
-       Serial.println("individual");
+       // Serial.println("individual");
+       // make the pin "latitude" go HIGH
+       for (int j=2; j<=latitude.toInt(); j++) {
+         digitalWrite(j, HIGH);
+       }
    } else {
      // Serial.println(latitude[0]);
      // we deal with 2 cases: hemispheres and quadrants
-     
      switch(latitude[0]) {
        case 'h': {
          Serial.println("hemisphere");
