@@ -62,7 +62,10 @@ void lightHerUp(String latitude, String longitude) {
      // we deal with 2 cases: hemispheres and quadrants
      switch(latitude[0]) {
        case 'h': {
-         // Serial.println("hemisphere");
+         // THis is the hemisphere case. Turn on all the latitudes..
+         for (int p=2; p<=10; p++) {
+           digitalWrite(p, HIGH);
+         }
          // we then switch through WHICH hemisphere
          switch(longitude[0]){
            case 'l': {
