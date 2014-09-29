@@ -41,12 +41,30 @@ void lightHerUp(String latitude, String longitude) {
        case 's': {
          // this is the case of sweeping a single longitude. 
          // step 1: we put the correspoding longitude pin LOW and prepare it for the inevitable...
-         digitalWrite(longitude.toInt(), LOW);
+         int longitudeInt = longitude.toInt();
+         Serial.println(longitudeInt);
+         digitalWrite(longitudeInt, LOW);
          
-         //step 2: we put the latitudes high one by one with a time delay
-         for (int b=9; b>=2; b--) {  // pins 2 to 9 are the 8 latitudes
+         // step 2: depending on whether the chosen semi-meridian is a long or a short one (at the entrance), we need to choose a seperate starting LED for the sweep
+         int sweepStart = 9;
+         
+         if (longitudeInt >= 23 && longitudeInt <= 37 && longitudeInt%2 == 1) {
+           Serial.println("odd in range");
+           sweepStart = 5;
+         } else {
+           Serial.println("even in range");
+           sweepStart = 9;
+         }
+         /**/
+         
+         digitalWrite(longitudeInt, LOW);    // doing it again for luck
+         
+         //step 3: we put the latitudes high one by one with a time delay
+         for (int b=sweepStart; b>=2; b--) {  // pins 2 to 9 are the 8 latitudes
            // clear the previous latitude..
-           digitalWrite(b+1, LOW);
+           if (b < sweepStart) {
+             digitalWrite(b+1, LOW);
+           }
            
            // then, write the present one HIGH
            digitalWrite(b, HIGH);
@@ -54,7 +72,7 @@ void lightHerUp(String latitude, String longitude) {
            // and the most important thing, a delay
            delay(2000);  // 2 seconds for now, can be increased
          }
-         digitalWrite(longitude.toInt(), HIGH);
+         digitalWrite(longitudeInt, HIGH);
          digitalWrite(2, LOW);  // clear the last one as well, which will always be the topmost one (assuming a test is always completed when started).
          break;
        }
