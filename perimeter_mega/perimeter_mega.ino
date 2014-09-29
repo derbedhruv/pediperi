@@ -65,7 +65,7 @@ void lightHerUp(String latitude, String longitude) {
        case 's': {
          // this is the case of sweeping a single longitude. 
          // step 1: we put the correspoding longitude pin LOW and prepare it for the inevitable...
-         digitalWrite(longitude, LOW);
+         digitalWrite(longitude.toInt(), LOW);
          
          //step 2: we put the latitudes high one by one with a time delay
          for (int b=2; b<10; b++) {  // pins 2 to 9 are the 8 latitudes
@@ -78,7 +78,7 @@ void lightHerUp(String latitude, String longitude) {
            // and the most important thing, a delay
            delay(2000);  // 2 seconds for now, can be increased
          }
-         digitalWrite(b, LOW);  // clear the last one as well
+         digitalWrite(9, LOW);  // clear the last one as well, which will always be 9
          break;
        }
        case 'h': {
@@ -170,7 +170,7 @@ void lightHerUp(String latitude, String longitude) {
      }
      
    }
-}
+/* } */
 
 void loop() {
   if (acquired == true) {
