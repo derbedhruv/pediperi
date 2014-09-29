@@ -100,6 +100,7 @@ void lightHerUp(String latitude, String longitude) {
          // we start by putting the latitudes on
          for (int s=2; s<=10; s++) {
            digitalWrite(s, HIGH);
+           delay(1);
          }
          switch(longitude[0]) {
            // we shall go anticlockwise. "1" shall start from the bottom right. 
@@ -141,7 +142,7 @@ void lightHerUp(String latitude, String longitude) {
             for (int q=11; q<=12; q++) {
                digitalWrite(2*q, LOW);
                delay(1);
-             }
+            }
             break;
           } 
          }
