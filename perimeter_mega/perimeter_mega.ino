@@ -7,7 +7,7 @@ void setup() {
   // serial dude
   Serial.begin(9600);
   
-  // SET THE PINS WHICH WILL BE USED
+  // SET THE PINS WHICH WILL BE USED 
   // we set the longitudes as OUTPUT
   for (int i=2; i<=10; i++) {
     pinMode(i, OUTPUT);
@@ -47,7 +47,7 @@ void lightHerUp(String latitude, String longitude) {
        for (int j=22; j<=52; j++) {
          digitalWrite(j, HIGH);
        }
-   
+   /*
    // first check if the latitude value is a number or not..
    if (isdigit(latitude[0]) == 1) {  // the latitude will only be (2,10) so that's cool, it's only one char
        // this is the case for a single LED
@@ -59,8 +59,12 @@ void lightHerUp(String latitude, String longitude) {
        
      } else {
      // Serial.println(latitude[0]);
-     // we deal with 2 cases: hemispheres and quadrants
+     /**/
+     // we deal with 3 cases: sweeps, hemispheres and quadrants
      switch(latitude[0]) {
+       case 's': {
+         // this is the case of sweeping a single longitude. 
+       }
        case 'h': {
          // THis is the hemisphere case. Turn on all the latitudes..
          for (int p=2; p<=10; p++) {
