@@ -17,18 +17,6 @@ void setup() {
   for (int m=22; m<=52; m++) {
     pinMode(m, OUTPUT);
   }
-  /*
-  step 1: set the latitude to be HIGH
-  digitalWrite(5, HIGH);
-  
-  step 2: set all the longitudes to be HIGH, so that everything's shut off
-  for (int j=22; j<=52; j++) {
-    digitalWrite(j, HIGH);
-  }
-  
-  step 3: set the longitude which you need to be on, LOW. then you have a single LED on.
-  digitalWrite(27, LOW);
-  /**/ 
 }
 
 void lightHerUp(String latitude, String longitude) {
