@@ -64,6 +64,22 @@ void lightHerUp(String latitude, String longitude) {
      switch(latitude[0]) {
        case 's': {
          // this is the case of sweeping a single longitude. 
+         // step 1: we put the correspoding longitude pin LOW and prepare it for the inevitable...
+         digitalWrite(longitude, LOW);
+         
+         //step 2: we put the latitudes high one by one with a time delay
+         for (int b=2; b<10; b++) {  // pins 2 to 9 are the 8 latitudes
+           // clear the previous latitude..
+           digitalWrite(b-1, LOW);
+           
+           // then, write the present one HIGH
+           digitalWrite(b, HIGH);
+           
+           // and the most important thing, a delay
+           delay(2000);  // 2 seconds for now, can be increased
+         }
+         digitalWrite(b, LOW);  // clear the last one as well
+         break;
        }
        case 'h': {
          // THis is the hemisphere case. Turn on all the latitudes..
