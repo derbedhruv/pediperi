@@ -47,19 +47,7 @@ void lightHerUp(String latitude, String longitude) {
        for (int j=22; j<=52; j++) {
          digitalWrite(j, HIGH);
        }
-   /*
-   // first check if the latitude value is a number or not..
-   if (isdigit(latitude[0]) == 1) {  // the latitude will only be (2,10) so that's cool, it's only one char
-       // this is the case for a single LED
-       // step 1: set the latitude to be HIGH
-       digitalWrite(latitude.toInt(), HIGH);
-  
-       // step 2: set the longitude which you need to be on, LOW. then you have a single LED on.
-       digitalWrite(longitude.toInt(), LOW);
        
-     } else {
-     // Serial.println(latitude[0]);
-     /**/
      // we deal with 3 cases: sweeps, hemispheres and quadrants
      switch(latitude[0]) {
        case 's': {
@@ -68,9 +56,9 @@ void lightHerUp(String latitude, String longitude) {
          digitalWrite(longitude.toInt(), LOW);
          
          //step 2: we put the latitudes high one by one with a time delay
-         for (int b=2; b<10; b++) {  // pins 2 to 9 are the 8 latitudes
+         for (int b=9; b>=2; b--) {  // pins 2 to 9 are the 8 latitudes
            // clear the previous latitude..
-           digitalWrite(b-1, LOW);
+           digitalWrite(b+1, LOW);
            
            // then, write the present one HIGH
            digitalWrite(b, HIGH);
@@ -78,7 +66,8 @@ void lightHerUp(String latitude, String longitude) {
            // and the most important thing, a delay
            delay(2000);  // 2 seconds for now, can be increased
          }
-         digitalWrite(9, LOW);  // clear the last one as well, which will always be 9
+         digitalWrite(longitude.toInt(), HIGH);
+         digitalWrite(2, LOW);  // clear the last one as well, which will always be the topmost one (assuming a test is always completed when started).
          break;
        }
        case 'h': {
