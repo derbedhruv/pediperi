@@ -1,6 +1,6 @@
 #include <ctype.h>
 
-String inputString, lat, longit;
+String inputString="", lat="", longit="";
 boolean acquired = false;
 
 void setup() {
@@ -168,17 +168,7 @@ void lightHerUp(String latitude, String longitude) {
 /* } */
 
 void loop() {
-  if (acquired == true) {
-     // Serial.print("started... ");
-     lightHerUp(lat, longit);
-     acquired = false;
-  }
-}
-
-void serialEvent() {
-  // this is where the user can enter the LED they want to be put on.. and that's what'll happen
-  while (Serial.available()) {
-    // get the new byte:
+  if (Serial.available()) {
     char inChar = (char)Serial.read(); 
     
     if (inChar == ',') {
@@ -189,10 +179,9 @@ void serialEvent() {
     } else {
       if (inChar == '\n') {
         longit = inputString;
-        // Serial.println(inputString);
+        lightHerUp(lat, longit);  // write to arduino
         // reset that shit
         inputString = "";
-        acquired = true;
       } else {
         inputString += inChar;
       }
