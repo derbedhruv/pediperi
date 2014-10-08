@@ -170,8 +170,10 @@ void lightHerUp(String latitude, String longitude) {
 void loop() {
   if (Serial.available()) {
     char inChar = (char)Serial.read(); 
-    
-    if (inChar == ',') {
+    // adding an 'x' for breaking out of any for loop..
+    if (inChar == 'x') {
+      
+    } else if (inChar == ',') {  // normal, previous function
       // Serial.println(inputString);
       lat = inputString;
       // reset that shit
