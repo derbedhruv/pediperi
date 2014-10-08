@@ -1,7 +1,7 @@
 #include <ctype.h>
 
 String inputString="", lat="", longit="";
-boolean acquired = false;
+boolean acquired = false, breakOut = false;
 
 void setup() {
   // serial dude
@@ -172,7 +172,7 @@ void loop() {
     char inChar = (char)Serial.read(); 
     // adding an 'x' for breaking out of any for loop..
     if (inChar == 'x') {
-      
+      breakOut = true;  // break out of the loops yo
     } else if (inChar == ',') {  // normal, previous function
       // Serial.println(inputString);
       lat = inputString;
