@@ -35,7 +35,7 @@ void loop() {
    // step 3: we put the latitudes high one by one with a time delay
             // Serial.println("entered loop");
          if(currentMillis - previousMillis > interval) {
-           Serial.println(b);
+ //***          Serial.println(b);
            b--;    // change the b value
            previousMillis = currentMillis;    
          } else {           // what to do when its within the interval
@@ -64,7 +64,7 @@ void serialEvent() {
       breakOut = false;
       // Serial.println(inputString);
       lat = inputString;
-      Serial.println(lat);
+ //***     Serial.println(lat);
       // reset that shit
       inputString = "";
     } else {
@@ -72,7 +72,7 @@ void serialEvent() {
       if (inChar == '\n') {
         breakOut = false;
         longit = inputString;
-        Serial.println(longit);
+ //***       Serial.println(longit);
         // now we reset the shit out of it all...
         
         // step 1: turn OFF all latitudes..
@@ -95,10 +95,10 @@ void serialEvent() {
          
          // step 2: depending on whether the chosen semi-meridian is a long or a short one (at the entrance), we need to choose a seperate starting LED for the sweep         
          if (longitudeInt >= 23 && longitudeInt <= 37 && longitudeInt%2 == 1) {
-           Serial.println("odd in range");
+//  ****          // Serial.println("odd in range");
            sweepStart = 5;
          } else {
-           Serial.println("even in range");
+//****           // Serial.println("even in range");
            sweepStart = 9;
          }
          b = sweepStart+1;    // an extra 1 added becaus the first thing that's done is b--
@@ -198,7 +198,7 @@ void serialEvent() {
           // reset everytnig...
           sweep = false;
           b=0;
-          Serial.println("breaking out");
+ //***         Serial.println("breaking out");
           // break;
         }
         // lightHerUp(lat, longit);  // write to arduino
