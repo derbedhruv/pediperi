@@ -33,30 +33,8 @@ void loop()
   currentMillis = millis();
  
  if (breakOut == false) {
-   // Serial.println("entered loop");
-  if(currentMillis - previousMillis > interval) {
-      // save the last time you blinked the LED 
-      previousMillis = currentMillis;   
-
-      // put on the LEDs that are supposed to be on...
-      lightHerUp(lat, longit);      
-  } 
- } else {    // if breakOut == true, that is
-      // stop that shit
-      Serial.println("stopped");
-    }
-}
-
-// the code for choosing which LEDs need to be on..
-void lightHerUp(String latitude, String longitude) {
-   // this is a special function.
-   // for single LEDs, the arguments shall be numbers in the range ((2, 10), (22, 46))
-   // for hemispheres, the inputs will be ((h), [l,r]) corresponding to the 4 hemispheres possible
-   // for quadrants, the inputs will be ((q), [1,2,3,4]) corresponding to the 4 quadrants possible
-   // all LEDs will flash for a particular period of time and then cut off.
    
-   // Serial.println("entered lighting function");
-   
+   // the code for choosing which LEDs need to be on..
    // we start by resetting all the LEDs
    // step 1: turn OFF all latitudes..
        for (int h=2; h<=10; h++) {
@@ -68,11 +46,11 @@ void lightHerUp(String latitude, String longitude) {
        }
        
      // we deal with 3 cases: sweeps, hemispheres and quadrants
-     switch(latitude[0]) {
+     switch(lat[0]) {
        case 's': {
          // this is the case of sweeping a single longitude. 
          // step 1: we put the correspoding longitude pin LOW and prepare it for the inevitable...
-         int longitudeInt = longitude.toInt();
+         int longitudeInt = longit.toInt();
          Serial.println(longitudeInt);
          digitalWrite(longitudeInt, LOW);
          
@@ -91,14 +69,20 @@ void lightHerUp(String latitude, String longitude) {
          digitalWrite(longitudeInt, LOW);    // doing it again for luck
          
          //step 3: we put the latitudes high one by one with a time delay
-         for (int b=sweepStart; b>=2; b--) {  // pins 2 to 9 are the 8 latitudes
-           if (breakOut == true) {
-             Serial.println("reset rahega");
-             break;    // get the F out
-           }
+         // for (int b=sweepStart; b>=2; b--) {  // pins 2 to 9 are the 8 latitudes
+         
+         int b=sweepStart+1;    // an extra 1 added becaus the first thing that's done is b--
+            // Serial.println("entered loop");
+         if(currentMillis - previousMillis > interval) {
+           b--;    // change the b value
+           // save the last time you blinked the LED 
+           previousMillis = currentMillis;    
+     
            // clear the previous latitude..
            if (b < sweepStart) {
              digitalWrite(b+1, LOW);
+           } else {
+             break;    // gtfo here 
            }
            
            // then, write the present one HIGH
@@ -120,7 +104,7 @@ void lightHerUp(String latitude, String longitude) {
            digitalWrite(p, HIGH);
          }
          // we then switch through WHICH hemisphere
-         switch(longitude[0]){
+         switch(longit[0]){
            case 'l': {
              Serial.println(" left waala");
              // LEFT hemisphere.. turn on U to X (31,37) and A to I (22,38).
@@ -156,7 +140,7 @@ void lightHerUp(String latitude, String longitude) {
          for (int s=2; s<=10; s++) {
            digitalWrite(s, HIGH);
          }
-         switch(longitude[0]) {
+         switch(longit[0]) {
            // we shall go anticlockwise. "1" shall start from the bottom right. 
           case '1': {
             // the bottom right. O (50 to 52) to T (23 to 29).
@@ -202,9 +186,12 @@ void lightHerUp(String latitude, String longitude) {
          }
          break;
        }
-     }
-     
-   }
+     } 
+ } else {    // if breakOut == true, that is
+      // stop that shit
+      Serial.println("stopped");
+    }
+}
 
 void serialEvent() {
   // breakOut = false;
