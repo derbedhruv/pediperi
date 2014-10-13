@@ -27,6 +27,7 @@ void loop()
   // blink the LED.
   unsigned long currentMillis = millis();
  
+ if (breakOut == false) {
   if(currentMillis - previousMillis > interval) {
     // save the last time you blinked the LED 
     previousMillis = currentMillis;   
@@ -38,15 +39,15 @@ void loop()
       ledState = LOW;
 
     // set the LED with the ledState of the variable:
-    if (breakOut == false) {
+    
       digitalWrite(ledPin, ledState);
-    } else {
+      
+    } 
+ } else {    // if breakOut == true, that is
       digitalWrite(ledPin, LOW);      // stop that shit
       Serial.println("stopped");
     }
-  }
 }
-
 
 void serialEvent() {
   // breakOut = false;
