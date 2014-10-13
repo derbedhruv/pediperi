@@ -67,7 +67,11 @@ void loop()
            b--;    // change the b value
            // save the last time you blinked the LED 
            previousMillis = currentMillis;    
-     
+           
+           // and the most important thing, a delay
+           // delay(2000);  // 2 seconds for now, can be increased
+         } else {
+           // what to do when its within the interval
            // clear the previous latitude..
            if (b < sweepStart) {
              digitalWrite(b+1, LOW);
@@ -75,15 +79,15 @@ void loop()
              break;    // gtfo here 
            }
            
-           // then, write the present one HIGH
-           digitalWrite(b, HIGH);
-           
-           // and the most important thing, a delay
-           // delay(2000);  // 2 seconds for now, can be increased
+           if (b >= 2) {
+             // then, write the present one HIGH
+             digitalWrite(b, HIGH);
+           } else {
+             digitalWrite(longitudeInt, HIGH);
+             digitalWrite(2, LOW);  // clear the last one as well, which will always be the topmost one (assuming a test is always completed when started).
+             break;
+           }
          }
-         digitalWrite(longitudeInt, HIGH);
-         digitalWrite(2, LOW);  // clear the last one as well, which will always be the topmost one (assuming a test is always completed when started).
-         break;
        }
        case 'h': {         
          // THis is the hemisphere case. Turn on all the latitudes..
@@ -174,7 +178,7 @@ void loop()
      } 
  } else {    // if breakOut == true, that is
       // stop that shit
-      Serial.println("stopped");
+      // Serial.println("stopped");
     }
 }
 
