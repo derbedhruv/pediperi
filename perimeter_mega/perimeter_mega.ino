@@ -61,6 +61,10 @@ void lightHerUp(String latitude, String longitude) {
          
          //step 3: we put the latitudes high one by one with a time delay
          for (int b=sweepStart; b>=2; b--) {  // pins 2 to 9 are the 8 latitudes
+           if (breakOut == true) {
+             Serial.println("reset rahega");
+             break;    // get the F out
+           }
            // clear the previous latitude..
            if (b < sweepStart) {
              digitalWrite(b+1, LOW);
@@ -167,7 +171,7 @@ void lightHerUp(String latitude, String longitude) {
    }
 /* } */
 
-void loop() {
+void serialEvent() {
   if (Serial.available()) {
     char inChar = (char)Serial.read(); 
     // adding an 'x' for breaking out of any for loop..
@@ -190,3 +194,5 @@ void loop() {
     }
   }
 }
+
+void loop(){}
