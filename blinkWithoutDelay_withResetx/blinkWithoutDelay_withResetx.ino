@@ -1,8 +1,7 @@
 String inputString="", lat="", longit="";
-boolean acquired = false, breakOut = false;
+boolean acquired = false, breakOut = false, sweep=false;
 unsigned long currentMillis;
-
-const int ledPin =  13;      // the number of the LED pin
+int sweepStart, longitudeInt, b;
 
 // Variables will change:
 int ledState = LOW;             // ledState used to set the LED
@@ -28,24 +27,73 @@ void setup() {
   }
 }
 
-void loop()
-{
-  currentMillis = millis();
- 
- if (breakOut == false) {
+void loop() {
+ if (sweep == true) {
+   currentMillis = millis();
    
-     // the code for choosing which LEDs need to be on..
-     // we deal with 3 cases: sweeps, hemispheres and quadrants
+   // the code for choosing which LEDs need to be on..
+   // step 3: we put the latitudes high one by one with a time delay
+            // Serial.println("entered loop");
+         if(currentMillis - previousMillis > interval) {
+           Serial.println(b);
+           b--;    // change the b value
+           previousMillis = currentMillis;    
+         } else {           // what to do when its within the interval
+           // clear the previous latitude..
+           if (b < sweepStart) {
+             digitalWrite(b+1, LOW);
+           } 
+           if (b >= 2) {
+             // then, write the present one HIGH
+             digitalWrite(b, HIGH);
+           } else {
+             digitalWrite(longitudeInt, HIGH);
+             digitalWrite(2, LOW);  // clear the last one as well, which will always be the topmost one (assuming a test is always completed when started).
+             sweep = false;    // gtfo
+           }
+         }
+ }
+}
+
+void serialEvent() {
+  // breakOut = false;
+  if (Serial.available()) {
+    char inChar = (char)Serial.read(); 
+    // adding an 'x' for breaking out of any for loop..
+    if (inChar == ',') {  // normal, previous function
+      breakOut = false;
+      // Serial.println(inputString);
+      lat = inputString;
+      Serial.println(lat);
+      // reset that shit
+      inputString = "";
+    } else {
+      
+      if (inChar == '\n') {
+        breakOut = false;
+        longit = inputString;
+        Serial.println(longit);
+        // now we reset the shit out of it all...
+        // step 1: turn OFF all latitudes..
+        for (int h=2; h<=10; h++) {
+         digitalWrite(h, LOW);
+        }
+       // step 2: set all the longitudes to be HIGH, so that everything's shut off
+        for (int j=22; j<=52; j++) {
+         digitalWrite(j, HIGH);
+        }
+        
+             // we deal with 3 cases: sweeps, hemispheres and quadrants
      switch(lat[0]) {
        case 's': {
          // this is the case of sweeping a single longitude. 
          // step 1: we put the correspoding longitude pin LOW and prepare it for the inevitable...
-         int longitudeInt = longit.toInt();
-         Serial.println(longitudeInt);
+         longitudeInt = longit.toInt();
+         // Serial.println(longitudeInt);
          digitalWrite(longitudeInt, LOW);
          
          // step 2: depending on whether the chosen semi-meridian is a long or a short one (at the entrance), we need to choose a seperate starting LED for the sweep
-         int sweepStart = 9;
+         sweepStart = 9;
          
          if (longitudeInt >= 23 && longitudeInt <= 37 && longitudeInt%2 == 1) {
            Serial.println("odd in range");
@@ -54,40 +102,8 @@ void loop()
            Serial.println("even in range");
            sweepStart = 9;
          }
-         /**/
-         
-         digitalWrite(longitudeInt, LOW);    // doing it again for luck
-         
-         //step 3: we put the latitudes high one by one with a time delay
-         // for (int b=sweepStart; b>=2; b--) {  // pins 2 to 9 are the 8 latitudes
-         
-         int b=sweepStart+1;    // an extra 1 added becaus the first thing that's done is b--
-            // Serial.println("entered loop");
-         if(currentMillis - previousMillis > interval) {
-           b--;    // change the b value
-           // save the last time you blinked the LED 
-           previousMillis = currentMillis;    
-           
-           // and the most important thing, a delay
-           // delay(2000);  // 2 seconds for now, can be increased
-         } else {
-           // what to do when its within the interval
-           // clear the previous latitude..
-           if (b < sweepStart) {
-             digitalWrite(b+1, LOW);
-           } else {
-             break;    // gtfo here 
-           }
-           
-           if (b >= 2) {
-             // then, write the present one HIGH
-             digitalWrite(b, HIGH);
-           } else {
-             digitalWrite(longitudeInt, HIGH);
-             digitalWrite(2, LOW);  // clear the last one as well, which will always be the topmost one (assuming a test is always completed when started).
-             break;
-           }
-         }
+         b = sweepStart;    // an extra 1 added becaus the first thing that's done is b--
+         sweep = true;
        }
        case 'h': {         
          // THis is the hemisphere case. Turn on all the latitudes..
@@ -176,42 +192,12 @@ void loop()
          break;
        }
      } 
- } else {    // if breakOut == true, that is
-      // stop that shit
-      // Serial.println("stopped");
-    }
-}
-
-void serialEvent() {
-  // breakOut = false;
-  if (Serial.available()) {
-    char inChar = (char)Serial.read(); 
-    // adding an 'x' for breaking out of any for loop..
-    if (inChar == ',') {  // normal, previous function
-      breakOut = false;
-      // Serial.println(inputString);
-      lat = inputString;
-      Serial.println(lat);
-      // reset that shit
-      inputString = "";
-    } else {
-      
-      if (inChar == '\n') {
-        breakOut = false;
-        longit = inputString;
-        Serial.println(longit);
-        // now we reset the shit out of it all...
-        // step 1: turn OFF all latitudes..
-        for (int h=2; h<=10; h++) {
-         digitalWrite(h, LOW);
-        }
-       // step 2: set all the longitudes to be HIGH, so that everything's shut off
-        for (int j=22; j<=52; j++) {
-         digitalWrite(j, HIGH);
-        }
         
         if (longit[0] == 'x') {
           breakOut = true;  // break out of the loops yo
+          // reset everytnig...
+          sweep = false;
+          b=0;
           Serial.println("breaking out");
           // break;
         }
