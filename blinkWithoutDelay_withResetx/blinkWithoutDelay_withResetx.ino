@@ -34,17 +34,7 @@ void loop()
  
  if (breakOut == false) {
    
-   // the code for choosing which LEDs need to be on..
-   // we start by resetting all the LEDs
-   // step 1: turn OFF all latitudes..
-       for (int h=2; h<=10; h++) {
-         digitalWrite(h, LOW);
-       }
-   // step 2: set all the longitudes to be HIGH, so that everything's shut off
-       for (int j=22; j<=52; j++) {
-         digitalWrite(j, HIGH);
-       }
-       
+     // the code for choosing which LEDs need to be on..
      // we deal with 3 cases: sweeps, hemispheres and quadrants
      switch(lat[0]) {
        case 's': {
@@ -95,10 +85,7 @@ void loop()
          digitalWrite(2, LOW);  // clear the last one as well, which will always be the topmost one (assuming a test is always completed when started).
          break;
        }
-       case 'h': {
-         
-         Serial.println("hemisphere");
-         
+       case 'h': {         
          // THis is the hemisphere case. Turn on all the latitudes..
          for (int p=2; p<=10; p++) {
            digitalWrite(p, HIGH);
@@ -106,7 +93,6 @@ void loop()
          // we then switch through WHICH hemisphere
          switch(longit[0]){
            case 'l': {
-             Serial.println(" left waala");
              // LEFT hemisphere.. turn on U to X (31,37) and A to I (22,38).
              // first we put on 2*(11,19)
              for (int q=11; q<=19; q++) {
@@ -119,7 +105,6 @@ void loop()
              break;
            }
            case 'r': {
-             Serial.println(" right waala");
              // RIGHT hemisphere.. turn on J to T.. which is (40,52) in steps of 2 and (23, 29) in steps of 2
              // first we put on 2*(20,26)
              for (int q=20; q<=26; q++) {
@@ -211,6 +196,15 @@ void serialEvent() {
         breakOut = false;
         longit = inputString;
         Serial.println(longit);
+        // now we reset the shit out of it all...
+        // step 1: turn OFF all latitudes..
+        for (int h=2; h<=10; h++) {
+         digitalWrite(h, LOW);
+        }
+       // step 2: set all the longitudes to be HIGH, so that everything's shut off
+        for (int j=22; j<=52; j++) {
+         digitalWrite(j, HIGH);
+        }
         
         if (longit[0] == 'x') {
           breakOut = true;  // break out of the loops yo
