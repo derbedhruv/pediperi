@@ -15,7 +15,17 @@ long interval = 1000;           // interval at which to blink (milliseconds)
 
 void setup() {
   Serial.begin(9600);
-  pinMode(ledPin, OUTPUT);  
+    
+  // SET THE PINS WHICH WILL BE USED 
+  // we set the longitudes as OUTPUT
+  for (int i=2; i<=10; i++) {
+    pinMode(i, OUTPUT);
+  }
+  
+  // we then set the latitudes as output
+  for (int m=22; m<=52; m++) {
+    pinMode(m, OUTPUT);
+  }
 }
 
 void loop()
@@ -23,16 +33,16 @@ void loop()
   currentMillis = millis();
  
  if (breakOut == false) {
+   // Serial.println("entered loop");
   if(currentMillis - previousMillis > interval) {
-    // save the last time you blinked the LED 
-    previousMillis = currentMillis;   
+      // save the last time you blinked the LED 
+      previousMillis = currentMillis;   
 
-    // put on the LEDs that are supposed to be on...
-    lightHerUp(lat, longit);
-      
-    } 
+      // put on the LEDs that are supposed to be on...
+      lightHerUp(lat, longit);      
+  } 
  } else {    // if breakOut == true, that is
-      digitalWrite(ledPin, LOW);      // stop that shit
+      // stop that shit
       Serial.println("stopped");
     }
 }
@@ -44,6 +54,8 @@ void lightHerUp(String latitude, String longitude) {
    // for hemispheres, the inputs will be ((h), [l,r]) corresponding to the 4 hemispheres possible
    // for quadrants, the inputs will be ((q), [1,2,3,4]) corresponding to the 4 quadrants possible
    // all LEDs will flash for a particular period of time and then cut off.
+   
+   // Serial.println("entered lighting function");
    
    // we start by resetting all the LEDs
    // step 1: turn OFF all latitudes..
@@ -93,13 +105,16 @@ void lightHerUp(String latitude, String longitude) {
            digitalWrite(b, HIGH);
            
            // and the most important thing, a delay
-           delay(2000);  // 2 seconds for now, can be increased
+           // delay(2000);  // 2 seconds for now, can be increased
          }
          digitalWrite(longitudeInt, HIGH);
          digitalWrite(2, LOW);  // clear the last one as well, which will always be the topmost one (assuming a test is always completed when started).
          break;
        }
        case 'h': {
+         
+         Serial.println("hemisphere");
+         
          // THis is the hemisphere case. Turn on all the latitudes..
          for (int p=2; p<=10; p++) {
            digitalWrite(p, HIGH);
@@ -107,6 +122,7 @@ void lightHerUp(String latitude, String longitude) {
          // we then switch through WHICH hemisphere
          switch(longitude[0]){
            case 'l': {
+             Serial.println(" left waala");
              // LEFT hemisphere.. turn on U to X (31,37) and A to I (22,38).
              // first we put on 2*(11,19)
              for (int q=11; q<=19; q++) {
@@ -119,6 +135,7 @@ void lightHerUp(String latitude, String longitude) {
              break;
            }
            case 'r': {
+             Serial.println(" right waala");
              // RIGHT hemisphere.. turn on J to T.. which is (40,52) in steps of 2 and (23, 29) in steps of 2
              // first we put on 2*(20,26)
              for (int q=20; q<=26; q++) {
