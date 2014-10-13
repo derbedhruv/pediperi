@@ -74,11 +74,12 @@ void serialEvent() {
         longit = inputString;
         Serial.println(longit);
         // now we reset the shit out of it all...
+        
         // step 1: turn OFF all latitudes..
         for (int h=2; h<=10; h++) {
          digitalWrite(h, LOW);
         }
-       // step 2: set all the longitudes to be HIGH, so that everything's shut off
+        // step 2: set all the longitudes to be HIGH, so that everything's shut off
         for (int j=22; j<=52; j++) {
          digitalWrite(j, HIGH);
         }
@@ -92,9 +93,7 @@ void serialEvent() {
          // Serial.println(longitudeInt);
          digitalWrite(longitudeInt, LOW);
          
-         // step 2: depending on whether the chosen semi-meridian is a long or a short one (at the entrance), we need to choose a seperate starting LED for the sweep
-         sweepStart = 9;
-         
+         // step 2: depending on whether the chosen semi-meridian is a long or a short one (at the entrance), we need to choose a seperate starting LED for the sweep         
          if (longitudeInt >= 23 && longitudeInt <= 37 && longitudeInt%2 == 1) {
            Serial.println("odd in range");
            sweepStart = 5;
@@ -102,8 +101,9 @@ void serialEvent() {
            Serial.println("even in range");
            sweepStart = 9;
          }
-         b = sweepStart;    // an extra 1 added becaus the first thing that's done is b--
+         b = sweepStart+1;    // an extra 1 added becaus the first thing that's done is b--
          sweep = true;
+         break;
        }
        case 'h': {         
          // THis is the hemisphere case. Turn on all the latitudes..
