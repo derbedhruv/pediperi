@@ -1,3 +1,5 @@
+// as of 07-NOV-14, this is the latest version
+
 String inputString="", lat="", longit="";
 boolean acquired = false, breakOut = false, sweep=false;
 unsigned long currentMillis;
@@ -42,6 +44,8 @@ void loop() {
            // clear the previous latitude..
            if (b < sweepStart) {
              digitalWrite(b+1, LOW);
+             // We notify over serial (to processing), that the next LED has come on.
+             Serial.println("y");    // y="yes, move on to the next LED please!"
            } 
            if (b >= 2) {
              // then, write the present one HIGH
