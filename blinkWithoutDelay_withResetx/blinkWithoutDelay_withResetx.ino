@@ -39,13 +39,13 @@ void loop() {
          if(currentMillis - previousMillis > interval) {
  //***          Serial.println(b);
            b--;    // change the b value
-           previousMillis = currentMillis;    
+           previousMillis = currentMillis;   
+           // We notify over serial (to processing), that the next LED has come on.
+           Serial.println(b);    // That's the iteration of the LED that's ON 
          } else {           // what to do when its within the interval
            // clear the previous latitude..
            if (b < sweepStart) {
              digitalWrite(b+1, LOW);
-             // We notify over serial (to processing), that the next LED has come on.
-             Serial.println("y");    // y="yes, move on to the next LED please!"
            } 
            if (b >= 2) {
              // then, write the present one HIGH
