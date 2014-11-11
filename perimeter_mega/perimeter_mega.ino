@@ -38,10 +38,10 @@ void loop() {
             // Serial.println("entered loop");
          if(currentMillis - previousMillis > interval) {
  //***          Serial.println(b);
+           Serial.println(b);    // That's the iteration of the LED that's ON 
            b--;    // change the b value
            previousMillis = currentMillis;   
            // We notify over serial (to processing), that the next LED has come on.
-           Serial.println(b);    // That's the iteration of the LED that's ON 
          } else {           // what to do when its within the interval
            // clear the previous latitude..
            if (b < sweepStart) {
