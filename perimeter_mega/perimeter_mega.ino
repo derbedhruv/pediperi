@@ -45,13 +45,7 @@ void loop() {
    // the code for choosing which LEDs need to be on..
    // step 3: we put the latitudes high one by one with a time delay
             // Serial.println("entered loop");
-         if(currentMillis - previousMillis > interval) {
- //***          Serial.println(b);
-           Serial.println(b-1);    // That's the iteration of the LED that's ON 
-           b--;    // change the b value
-           previousMillis = currentMillis;   
-           // We notify over serial (to processing), that the next LED has come on.
-         } else {           // what to do when its within the interval
+         if(currentMillis - previousMillis <= interval) {
            // clear the previous latitude..
            if (b < sweepStart) {
              digitalWrite(b+1, LOW);
@@ -64,6 +58,11 @@ void loop() {
              digitalWrite(2, LOW);  // clear the last one as well, which will always be the topmost one (assuming a test is always completed when started).
              sweep = false;    // gtfo
            }
+         } else {           // what to do when its within the interval
+           Serial.println(b-1);    // That's the iteration of the LED that's ON 
+           b--;    // change the b value
+           previousMillis = currentMillis;   
+           // We notify over serial (to processing), that the next LED has come on.
          }
  }
 }
