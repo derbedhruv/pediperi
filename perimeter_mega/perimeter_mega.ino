@@ -127,11 +127,11 @@ void serialEvent() {
            case 'l': {
              // LEFT hemisphere.. turn on U to X (31,37) and A to I (22,38).
              // first we put on 2*(11,19)
-             for (int q=11; q<=19; q++) {
+             for (int q=11; q<=18; q++) {
                digitalWrite(2*q, LOW);
              }
              // then we put on 2*(15,18)+1
-             for (int r=15; r<=18; r++) {
+             for (int r=16; r<=18; r++) {
                digitalWrite((2*r+1), LOW);
              }
              break;
@@ -174,7 +174,7 @@ void serialEvent() {
           } 
           case '2': {
             // the top right. I to N (38 to 48) 
-            for (int q=19; q<=24; q++) {
+            for (int q=20; q<=24; q++) {
                digitalWrite(2*q, LOW);
              }
             break;
@@ -190,7 +190,7 @@ void serialEvent() {
           case '4': {
             // the bottom left. U to X (31 to 37), A to B (22, 24)
             // then we put on 2*(11,14)+1
-            for (int r=15; r<=18; r++) {
+            for (int r=16; r<=18; r++) {
               digitalWrite((2*r+1), LOW);
               delay(1);
             }
