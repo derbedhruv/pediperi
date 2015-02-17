@@ -32,10 +32,11 @@ void setup() {
   int fixationLED = 11, IRLED = 12;
   pinMode(fixationLED, OUTPUT);    // 4 gaze fixation target visible LEDs
   pinMode(IRLED, OUTPUT);    // 4 IR LEDs for the camera
-  
+  pinMode(10,OUTPUT);
   // next we give the PWM command to drive them. THey have 100E current limiting resistors
   analogWrite(fixationLED, 150);
   analogWrite(IRLED, 200);
+  digitalWrite(10,LOW);
 }
 
 void loop() {
