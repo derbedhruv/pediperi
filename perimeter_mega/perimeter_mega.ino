@@ -29,13 +29,13 @@ void setup() {
   }
   
   // we will set the PWM pin which control the camera-side LEDs 
-  int fixationLED = 11, IRLED = 12;
+  int fixationLED = 11, IRLED = 12,ground=10;
   pinMode(fixationLED, OUTPUT);    // 4 gaze fixation target visible LEDs
   pinMode(IRLED, OUTPUT);    // 4 IR LEDs for the camera
-  pinMode(10,OUTPUT);
+  pinMode(ground,OUTPUT);
   // next we give the PWM command to drive them. THey have 100E current limiting resistors
-  analogWrite(fixationLED, 150);
-  analogWrite(IRLED, 200);
+  analogWrite(fixationLED, 80);
+  digitalWrite(IRLED, HIGH);
   digitalWrite(10,LOW);
 }
 
