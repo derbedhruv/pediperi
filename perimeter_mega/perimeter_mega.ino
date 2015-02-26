@@ -1,4 +1,7 @@
-// as of 07-NOV-14, this is the latest version
+// as of 20-FEB-2015
+/*
+  This is the legacy code for the Pediatric Perimeter, stable.
+*/
 
 String inputString="", lat="", longit="";
 boolean acquired = false, breakOut = false, sweep=false;
