@@ -1,4 +1,14 @@
-// as of 07-NOV-14, this is the latest version
+// as of 26-FEB-2015, this is the latest version
+/*
+  Pediatric Perimeter Arduino control code
+  
+  Authors: Karthik Reddy, Dhruv Joshi
+  
+  This is the arduino-side code for communication with the processing sketch
+  for the 'Pediatric Perimeter', a one-of-a kind device for monitoring and 
+  quantifying visual field in infants. This is a project being done at the 
+  "Srujana" Innovation Center at the L.V.Prasad Eye Institute, Hyderabad.
+*/
 
 String inputString="", lat="", longit="";
 boolean acquired = false, breakOut = false, sweep=false;
