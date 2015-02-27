@@ -1,7 +1,4 @@
-// as of 20-FEB-2015
-/*
-  This is the legacy code for the Pediatric Perimeter, stable.
-*/
+// as of 27-FEB-15, this is the latest version
 
 String inputString="", lat="", longit="";
 boolean acquired = false, breakOut = false, sweep=false;
@@ -11,12 +8,12 @@ int sweepStart, longitudeInt, b;
 // Variables will change:
 int ledState = LOW;             // ledState used to set the LED
 long previousMillis = 0;        // will store last time LED was updated
-
+int brightness=255;
 // the follow variables is a long because the time, measured in miliseconds,
 // will quickly become a bigger number than can be stored in an int.
 long interval = 1000;           // interval at which to blink (milliseconds)
 
-
+int fixationLED = 11, IRLED = 12,ground=10;
 void setup() {
   Serial.begin(9600);
     
@@ -32,13 +29,14 @@ void setup() {
   }
   
   // we will set the PWM pin which control the camera-side LEDs 
-  int fixationLED = 11, IRLED = 12;
-  pinMode(fixationLED, OUTPUT);    // 4 gaze fixation target visible LEDs
-  pinMode(IRLED, OUTPUT);    // 4 IR LEDs for the camera
   
+  pinMode(fixationLED, OUTPUT);    // 4 gaze fixation target visible LEDs
+  //pinMode(IRLED, OUTPUT);    // 4 IR LEDs for the camera
+  pinMode(ground,OUTPUT);
   // next we give the PWM command to drive them. THey have 100E current limiting resistors
-  analogWrite(fixationLED, 150);
-  analogWrite(IRLED, 200);
+  //analogWrite(fixationLED, 80);
+  //digitalWrite(IRLED, HIGH);
+  digitalWrite(ground,LOW);
 }
 
 void loop() {
@@ -55,9 +53,9 @@ void loop() {
            } 
            if (b >= 2) {
              // then, write the present one HIGH
-             digitalWrite(b, HIGH);
+             analogWrite(b, HIGH);
            } else {
-             digitalWrite(longitudeInt, HIGH);
+             analogWrite(longitudeInt, HIGH);
              digitalWrite(2, LOW);  // clear the last one as well, which will always be the topmost one (assuming a test is always completed when started).
              sweep = false;    // gtfo
            }
@@ -89,18 +87,24 @@ void serialEvent() {
         longit = inputString;
  //***       Serial.println(longit);
         // now we reset the shit out of it all...
-        
-        // step 1: turn OFF all latitudes..
-        for (int h=2; h<=10; h++) {
+        digitalWrite(fixationLED,HIGH);
+        // step 1: turn OFF all latitudes.. and longitudes and light up the fixation
+      for (int h=2; h<=10; h++) {
          digitalWrite(h, LOW);
         }
-        // step 2: set all the longitudes to be HIGH, so that everything's shut off
+        
+        
+        // step 2: set all the longitudes and latitudes to be HIGH, so that everything's shut off
+       
         for (int j=22; j<=52; j++) {
          digitalWrite(j, HIGH);
         }
         
              // we deal with 3 cases: sweeps, hemispheres and quadrants
      switch(lat[0]) {
+       case 'b':{
+       brightness=longit.toInt();
+       }
        case 's': {
          // this is the case of sweeping a single longitude. 
          // step 1: we put the correspoding longitude pin LOW and prepare it for the inevitable...
@@ -120,26 +124,27 @@ void serialEvent() {
          sweep = true;
          break;
        }
-       case 'h': {         
+       case 'h': {     
+        digitalWrite(fixationLED,LOW);
          // THis is the hemisphere case. Turn on all the latitudes..
-         for (int p=2; p<=10; p++) {
-           digitalWrite(p, HIGH);
-         }
+         for (int p=2; p<=9; p++) {
+           digitalWrite(p, brightness);
+         } 
          // we then switch through WHICH hemisphere
          switch(longit[0]){
            case 'l': {
              // LEFT hemisphere.. turn on U to X (31,37) and A to I (22,38).
              // first we put on 2*(11,19)
-             for (int q=11; q<=19; q++) {
+             for (int q=11; q<=18; q++) {
                digitalWrite(2*q, LOW);
              }
              // then we put on 2*(15,18)+1
-             for (int r=15; r<=18; r++) {
+             for (int r=16; r<=18; r++) {
                digitalWrite((2*r+1), LOW);
              }
              break;
            }
-           case 'r': {
+           case 'r': { 
              // RIGHT hemisphere.. turn on J to T.. which is (40,52) in steps of 2 and (23, 29) in steps of 2
              // first we put on 2*(20,26)
              for (int q=20; q<=26; q++) {
@@ -156,13 +161,15 @@ void serialEvent() {
        }
        case 'q': {
          // quadrants..
+         digitalWrite(fixationLED,LOW);
          // we start by putting the latitudes on
-         for (int s=2; s<=10; s++) {
+         for (int s=2; s<=9; s++) {
            digitalWrite(s, HIGH);
          }
          switch(longit[0]) {
            // we shall go anticlockwise. "1" shall start from the bottom right. 
           case '1': {
+            
             // the bottom right. O (50 to 52) to T (23 to 29).
             // then we put on 2*(11,14)+1
             for (int r=11; r<=14; r++) {
@@ -176,13 +183,15 @@ void serialEvent() {
             break;
           } 
           case '2': {
+            
             // the top right. I to N (38 to 48) 
-            for (int q=19; q<=24; q++) {
+            for (int q=20; q<=24; q++) {
                digitalWrite(2*q, LOW);
              }
             break;
           } 
           case '3': {
+            
             // the top left. C to H. (26 to 36).
             for (int q=13; q<=18; q++) {
                digitalWrite(2*q, LOW);
@@ -191,9 +200,10 @@ void serialEvent() {
             break;
           } 
           case '4': {
+            
             // the bottom left. U to X (31 to 37), A to B (22, 24)
             // then we put on 2*(11,14)+1
-            for (int r=15; r<=18; r++) {
+            for (int r=16; r<=18; r++) {
               digitalWrite((2*r+1), LOW);
               delay(1);
             }
@@ -209,6 +219,7 @@ void serialEvent() {
      } 
         
         if (longit[0] == 'x') {
+         digitalWrite(fixationLED,HIGH);
           breakOut = true;  // break out of the loops yo
           // reset everytnig...
           sweep = false;
@@ -216,6 +227,10 @@ void serialEvent() {
  //***         Serial.println("breaking out");
           // break;
         }
+        //else if (longit[0] == 'h'||longit[0] == 'q'||longit[0] == '1'||longit[0] == '2'||longit[0] == '3'||longit[0] == '4'||longit[0] == 'l'||longit[0] == 'r')
+        //digitalWrite(fixationLED, HIGH);
+        else
+        digitalWrite(fixationLED,LOW);
         // lightHerUp(lat, longit);  // write to arduino
         // reset that shit
         inputString = "";
@@ -223,6 +238,7 @@ void serialEvent() {
         
         
       } else {
+        
         inputString += inChar;
       }
     }
