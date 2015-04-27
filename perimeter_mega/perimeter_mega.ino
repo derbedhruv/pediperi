@@ -1,4 +1,5 @@
-// as of 07-NOV-14, this is the latest version
+// as of 27-APR-2015, this is the latest version
+// added the 30 degrees feature (lights off from 0 to 30)
 
 String inputString="", lat="", longit="";
 boolean acquired = false, breakOut = false, sweep=false;
