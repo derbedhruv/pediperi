@@ -1,14 +1,4 @@
-// as of 26-FEB-2015, this is the latest version
-/*
-  Pediatric Perimeter Arduino control code
-  
-  Authors: Karthik Reddy, Dhruv Joshi
-  
-  This is the arduino-side code for communication with the processing sketch
-  for the 'Pediatric Perimeter', a one-of-a kind device for monitoring and 
-  quantifying visual field in infants. This is a project being done at the 
-  "Srujana" Innovation Center at the L.V.Prasad Eye Institute, Hyderabad.
-*/
+// as of 07-NOV-14, this is the latest version
 
 String inputString="", lat="", longit="";
 boolean acquired = false, breakOut = false, sweep=false;
@@ -131,13 +121,13 @@ void serialEvent() {
        }
        case 'h': {     
         digitalWrite(fixationLED,LOW);
-         // THis is the hemisphere case. Turn on all the latitudes..
-         for (int p=2; p<=10; p++) {
-           digitalWrite(p, HIGH);
-         }
          // we then switch through WHICH hemisphere
          switch(longit[0]){
            case 'l': {
+             // THis is the hemisphere case. Turn on all the latitudes..
+             for (int p=2; p<=10; p++) {
+               digitalWrite(p, HIGH);
+             }
              // LEFT hemisphere.. turn on U to X (31,37) and A to I (22,38).
              // first we put on 2*(11,19)
              for (int q=11; q<=18; q++) {
@@ -150,6 +140,41 @@ void serialEvent() {
              break;
            }
            case 'r': { 
+             // THis is the hemisphere case. Turn on all the latitudes..
+             for (int p=2; p<=10; p++) {
+               digitalWrite(p, HIGH);
+             }
+             // RIGHT hemisphere.. turn on J to T.. which is (40,52) in steps of 2 and (23, 29) in steps of 2
+             // first we put on 2*(20,26)
+             for (int q=20; q<=26; q++) {
+               digitalWrite(2*q, LOW);
+             }
+             // then we put on 2*(11,14)+1
+             for (int r=11; r<=14; r++) {
+               digitalWrite((2*r+1), LOW);
+             }
+             break;  
+           }
+           // 30 degrees and outer case:
+           case 'a': {
+             for (int p=4; p<=10; p++) {
+               digitalWrite(p, HIGH);
+             }
+             // LEFT hemisphere.. turn on U to X (31,37) and A to I (22,38).
+             // first we put on 2*(11,19)
+             for (int q=11; q<=18; q++) {
+               digitalWrite(2*q, LOW);
+             }
+             // then we put on 2*(15,18)+1
+             for (int r=16; r<=18; r++) {
+               digitalWrite((2*r+1), LOW);
+             }
+             break;
+           }
+           case 'b': { 
+             for (int p=4; p<=10; p++) {
+               digitalWrite(p, HIGH);
+             }
              // RIGHT hemisphere.. turn on J to T.. which is (40,52) in steps of 2 and (23, 29) in steps of 2
              // first we put on 2*(20,26)
              for (int q=20; q<=26; q++) {
@@ -167,14 +192,13 @@ void serialEvent() {
        case 'q': {
          // quadrants..
          digitalWrite(fixationLED,LOW);
-         // we start by putting the latitudes on
-         for (int s=2; s<=10; s++) {
-           digitalWrite(s, HIGH);
-         }
          switch(longit[0]) {
            // we shall go anticlockwise. "1" shall start from the bottom right. 
           case '1': {
-            
+            // latitudes.. all on
+            for (int s=2; s<=10; s++) {
+               digitalWrite(s, HIGH);
+            }
             // the bottom right. O (50 to 52) to T (23 to 29).
             // then we put on 2*(11,14)+1
             for (int r=11; r<=14; r++) {
@@ -188,7 +212,10 @@ void serialEvent() {
             break;
           } 
           case '2': {
-            
+            // latitudes.. all on
+            for (int s=2; s<=10; s++) {
+               digitalWrite(s, HIGH);
+            }
             // the top right. I to N (38 to 48) 
             for (int q=20; q<=24; q++) {
                digitalWrite(2*q, LOW);
@@ -196,7 +223,10 @@ void serialEvent() {
             break;
           } 
           case '3': {
-            
+            // latitudes.. all on
+            for (int s=2; s<=10; s++) {
+               digitalWrite(s, HIGH);
+            }
             // the top left. C to H. (26 to 36).
             for (int q=13; q<=18; q++) {
                digitalWrite(2*q, LOW);
@@ -205,7 +235,66 @@ void serialEvent() {
             break;
           } 
           case '4': {
-            
+            // latitudes.. all on
+            for (int s=2; s<=10; s++) {
+               digitalWrite(s, HIGH);
+            }
+            // the bottom left. U to X (31 to 37), A to B (22, 24)
+            // then we put on 2*(11,14)+1
+            for (int r=16; r<=18; r++) {
+              digitalWrite((2*r+1), LOW);
+              delay(1);
+            }
+            for (int q=11; q<=12; q++) {
+               digitalWrite(2*q, LOW);
+               delay(1);
+             }
+            break;
+          } 
+          case '5': {
+            // turn on only the 30 degrees and higher latitudes
+            for (int s=4; s<=10; s++) {
+              digitalWrite(s, HIGH);
+            }
+            // outer 30 degrees bottom right
+            for (int r=11; r<=14; r++) {
+              digitalWrite((2*r+1), LOW);
+              delay(1);
+            }
+            for (int q=25; q<=26; q++) {
+               digitalWrite(2*q, LOW);
+               delay(1);
+             }
+            break;
+          }
+          case '6': {
+            // turn on only the 30 degrees and higher latitudes
+            for (int s=4; s<=10; s++) {
+              digitalWrite(s, HIGH);
+            }
+            // outer 30 degrees bottom right
+            for (int q=20; q<=24; q++) {
+               digitalWrite(2*q, LOW);
+             }
+            break;
+          }
+          case '7': {
+            // turn on only the 30 degrees and higher latitudes
+            for (int s=4; s<=10; s++) {
+              digitalWrite(s, HIGH);
+            }
+            // the top left. C to H. (26 to 36).
+            for (int q=13; q<=18; q++) {
+               digitalWrite(2*q, LOW);
+               delay(1);
+             }
+            break;
+          }
+         case '8': {
+            // turn on only the 30 degrees and higher latitudes
+            for (int s=4; s<=10; s++) {
+              digitalWrite(s, HIGH);
+            }
             // the bottom left. U to X (31 to 37), A to B (22, 24)
             // then we put on 2*(11,14)+1
             for (int r=16; r<=18; r++) {
