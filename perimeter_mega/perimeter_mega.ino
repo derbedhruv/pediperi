@@ -1,7 +1,7 @@
-// as of 27-APR-2015, this is the latest version
+// as of 30-APR-2015, this is the latest version
 // added the 30 degrees feature (lights off from 0 to 30)
 
-String inputString="", lat="", longit="";
+String inputString="", lat="", longit="",Slider="255";
 boolean acquired = false, breakOut = false, sweep=false;
 unsigned long currentMillis;
 int sweepStart, longitudeInt, b;
@@ -54,9 +54,9 @@ void loop() {
            } 
            if (b >= 2) {
              // then, write the present one HIGH
-             digitalWrite(b, HIGH);
+             analogWrite(b, Slider.toInt());
            } else {
-             digitalWrite(longitudeInt, HIGH);
+             analogWrite(longitudeInt, Slider.toInt());
              digitalWrite(2, LOW);  // clear the last one as well, which will always be the topmost one (assuming a test is always completed when started).
              sweep = false;    // gtfo
            }
@@ -100,6 +100,11 @@ void serialEvent() {
         
              // we deal with 3 cases: sweeps, hemispheres and quadrants
      switch(lat[0]) {
+       case 'm':{
+         Slider = String(longit);
+         // Serial.println(Slider);
+         break;
+       }
        case 's': {
          
          // this is the case of sweeping a single longitude. 
@@ -127,7 +132,7 @@ void serialEvent() {
            case 'l': {
              // THis is the hemisphere case. Turn on all the latitudes..
              for (int p=2; p<=10; p++) {
-               digitalWrite(p, HIGH);
+               analogWrite(p, Slider.toInt());
              }
              // LEFT hemisphere.. turn on U to X (31,37) and A to I (22,38).
              // first we put on 2*(11,19)
@@ -143,7 +148,7 @@ void serialEvent() {
            case 'r': { 
              // THis is the hemisphere case. Turn on all the latitudes..
              for (int p=2; p<=10; p++) {
-               digitalWrite(p, HIGH);
+               analogWrite(p, Slider.toInt());
              }
              // RIGHT hemisphere.. turn on J to T.. which is (40,52) in steps of 2 and (23, 29) in steps of 2
              // first we put on 2*(20,26)
@@ -159,7 +164,7 @@ void serialEvent() {
            // 30 degrees and outer case:
            case 'a': {
              for (int p=4; p<=10; p++) {
-               digitalWrite(p, HIGH);
+               analogWrite(p, Slider.toInt());
              }
              // LEFT hemisphere.. turn on U to X (31,37) and A to I (22,38).
              // first we put on 2*(11,19)
@@ -174,7 +179,7 @@ void serialEvent() {
            }
            case 'b': { 
              for (int p=4; p<=10; p++) {
-               digitalWrite(p, HIGH);
+               analogWrite(p, Slider.toInt());
              }
              // RIGHT hemisphere.. turn on J to T.. which is (40,52) in steps of 2 and (23, 29) in steps of 2
              // first we put on 2*(20,26)
@@ -198,7 +203,7 @@ void serialEvent() {
           case '1': {
             // latitudes.. all on
             for (int s=2; s<=10; s++) {
-               digitalWrite(s, HIGH);
+               analogWrite(s, Slider.toInt());
             }
             // the bottom right. O (50 to 52) to T (23 to 29).
             // then we put on 2*(11,14)+1
@@ -215,7 +220,7 @@ void serialEvent() {
           case '2': {
             // latitudes.. all on
             for (int s=2; s<=10; s++) {
-               digitalWrite(s, HIGH);
+               analogWrite(s, Slider.toInt());
             }
             // the top right. I to N (38 to 48) 
             for (int q=20; q<=24; q++) {
@@ -226,7 +231,7 @@ void serialEvent() {
           case '3': {
             // latitudes.. all on
             for (int s=2; s<=10; s++) {
-               digitalWrite(s, HIGH);
+               analogWrite(s, Slider.toInt());
             }
             // the top left. C to H. (26 to 36).
             for (int q=13; q<=18; q++) {
@@ -238,7 +243,7 @@ void serialEvent() {
           case '4': {
             // latitudes.. all on
             for (int s=2; s<=10; s++) {
-               digitalWrite(s, HIGH);
+               analogWrite(s, Slider.toInt());
             }
             // the bottom left. U to X (31 to 37), A to B (22, 24)
             // then we put on 2*(11,14)+1
@@ -255,7 +260,7 @@ void serialEvent() {
           case '5': {
             // turn on only the 30 degrees and higher latitudes
             for (int s=4; s<=10; s++) {
-              digitalWrite(s, HIGH);
+              analogWrite(s, Slider.toInt());
             }
             // outer 30 degrees bottom right
             for (int r=11; r<=14; r++) {
@@ -271,7 +276,7 @@ void serialEvent() {
           case '6': {
             // turn on only the 30 degrees and higher latitudes
             for (int s=4; s<=10; s++) {
-              digitalWrite(s, HIGH);
+              analogWrite(s, Slider.toInt());
             }
             // outer 30 degrees bottom right
             for (int q=20; q<=24; q++) {
@@ -282,7 +287,7 @@ void serialEvent() {
           case '7': {
             // turn on only the 30 degrees and higher latitudes
             for (int s=4; s<=10; s++) {
-              digitalWrite(s, HIGH);
+              analogWrite(s, Slider.toInt());
             }
             // the top left. C to H. (26 to 36).
             for (int q=13; q<=18; q++) {
@@ -294,7 +299,7 @@ void serialEvent() {
          case '8': {
             // turn on only the 30 degrees and higher latitudes
             for (int s=4; s<=10; s++) {
-              digitalWrite(s, HIGH);
+              analogWrite(s, Slider.toInt());
             }
             // the bottom left. U to X (31 to 37), A to B (22, 24)
             // then we put on 2*(11,14)+1
@@ -332,7 +337,9 @@ void serialEvent() {
         
         
         
-      } else {
+      } 
+           
+      else {
         
         inputString += inChar;
       }
