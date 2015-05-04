@@ -1,4 +1,4 @@
-// as of 30-APR-2015, this is the latest version
+// as of 04-MAY-2015, this is the latest version
 // added the 30 degrees feature (lights off from 0 to 30)
 
 String inputString="", lat="", longit="",Slider="255";
@@ -12,7 +12,7 @@ long previousMillis = 0;        // will store last time LED was updated
 
 // the follow variables is a long because the time, measured in miliseconds,
 // will quickly become a bigger number than can be stored in an int.
-long interval = 1000;           // interval at which to blink (milliseconds)
+unsigned long interval = 1000;           // interval at which to blink (milliseconds)
 
 int fixationLED = 11, IRLED = 12,ground=10;
 void setup() {
@@ -102,6 +102,11 @@ void serialEvent() {
      switch(lat[0]) {
        case 'm':{
          Slider = String(longit);
+         // Serial.println(Slider);
+         break;
+       }
+       case 't':{
+          interval= longit.toInt();
          // Serial.println(Slider);
          break;
        }
