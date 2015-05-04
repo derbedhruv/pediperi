@@ -107,7 +107,7 @@ void serialEvent() {
        }
        case 't':{
           interval= longit.toInt();
-         // Serial.println(Slider);
+          //Serial.println(longit);
          break;
        }
        case 's': {
