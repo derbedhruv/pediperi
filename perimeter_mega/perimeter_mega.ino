@@ -1,4 +1,4 @@
-// as of 27-FEB-15, this is the latest version
+// as of 04-may-15, this is the latest version
 
 String inputString="", lat="", longit="";
 boolean acquired = false, breakOut = false, sweep=false;
