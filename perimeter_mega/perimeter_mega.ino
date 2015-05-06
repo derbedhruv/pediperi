@@ -63,7 +63,6 @@ void loop() {
            }
          } else {           // what to do when its within the interval
            Serial.println(b-1);    // That's the iteration of the LED that's ON 
-           
            b--;    // change the b value
            previousMillis = currentMillis;   
            // We notify over serial (to processing), that the next LED has come on.
