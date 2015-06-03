@@ -1,4 +1,4 @@
-// as of 04-MAY-2015, this is the latest version
+// as of 03-JUN-2015, this is the latest version
 // added the 30 degrees feature (lights off from 0 to 30)
 
 String inputString="", lat="", longit="";
@@ -101,6 +101,7 @@ void serialEvent() {
         
              // we deal with 3 cases: sweeps, hemispheres and quadrants
      switch(lat[0]) {
+         
        case 'm':{
          Slider = String(longit).toInt();
          // Serial.println(Slider);
@@ -131,6 +132,29 @@ void serialEvent() {
          sweep = true;
          break;
        }
+     case 'f':{         
+       digitalWrite(fixationLED,LOW);
+         // we then switch through WHICH hemisphere
+         switch(longit[0]){
+           case '1': {
+             // THis is the hemisphere case. Turn on all the latitudes..
+             for (int p=2; p<=10; p++) {
+               analogWrite(p, Slider);
+             }
+             // LEFT hemisphere.. turn on U to X (31,37) and A to I (22,38). eliminated the 90 degree and 270 degree by eliminating 11 and 15
+             // first we put on 2*(11,19)
+             for (int q=11; q<=26; q++) {
+               digitalWrite(2*q, LOW);
+             }
+             // then we put on 2*(15,18)+1
+             for (int r=11; r<=18; r++) {
+               digitalWrite((2*r+1), LOW);
+             }
+             break;
+           }
+     }
+     break;
+   }
        case 'h': {     
         digitalWrite(fixationLED,LOW);
          // we then switch through WHICH hemisphere
@@ -140,7 +164,7 @@ void serialEvent() {
              for (int p=2; p<=10; p++) {
                analogWrite(p, Slider);
              }
-             // LEFT hemisphere.. turn on U to X (31,37) and A to I (22,38).
+             // LEFT hemisphere.. turn on U to X (31,37) and A to I (22,38). eliminated the 90 degree and 270 degree by eliminating 11 and 15
              // first we put on 2*(11,19)
              for (int q=11; q<=18; q++) {
                digitalWrite(2*q, LOW);
@@ -157,7 +181,7 @@ void serialEvent() {
                analogWrite(p, Slider);
              }
              // RIGHT hemisphere.. turn on J to T.. which is (40,52) in steps of 2 and (23, 29) in steps of 2
-             // first we put on 2*(20,26)
+             // first we put on 2*(20,26)                                                    eliminated the 90 degree and 270 degree
              for (int q=20; q<=26; q++) {
                digitalWrite(2*q, LOW);
              }
