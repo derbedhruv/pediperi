@@ -112,6 +112,7 @@ void serialEvent() {
           //Serial.println(longit);
          break;
        }
+       
        case 's': {
          
          // this is the case of sweeping a single longitude. 
@@ -132,6 +133,17 @@ void serialEvent() {
          sweep = true;
          break;
        }
+       case 'l':{
+       digitalWrite(fixationLED,LOW);
+       for (int j=22; j<=52; j++) {
+         digitalWrite(j, LOW);
+        }
+        longitudeInt = longit.toInt();
+       if(longitudeInt <8)
+       {
+       analogWrite(longitudeInt,Slider);
+       }
+   }
      case 'f':{         
        digitalWrite(fixationLED,LOW);
          // we then switch through WHICH hemisphere
